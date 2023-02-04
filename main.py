@@ -16,6 +16,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, unique=True, nullable=False)
+    is_admin = db.Boolean(db.Boolean)
 
 
 class Log(db.Model):
@@ -24,35 +25,36 @@ class Log(db.Model):
     """
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    record_title = db.Column(db.String, unique=True, Nullable=False)
-    last_name = db.Column(db.String, unique=True, Nullable=False)
-    first_name = db.Column(db.String, unique=True, Nullable=False)
-    start_time = db.Column(db.String, unique=True, Nullable=False)
-    end_time = db.column(db.Integer, unique=True, nullable=False)
-    time_in_minutes = db.column(db.Integer, unique=True, nullable=False)
-    type = db.Column(db.String, unique=True, Nullable=False)
-    communion = db.Column(db.Boolean, unique=False, nullable=False)
-    num_of_people = db.Column(db.Integer, unique=True, nullable=False)
-    comments = db.Column(db.String, unique=True, Nullable=False)
+    record_title = db.Column(db.String, nullable=False)
+    last_name = db.Column(db.String, nullable=False)
+    first_name = db.Column(db.String, nullable=False)
+    start_time = db.Column(db.String, nullable=False)
+    end_time = db.Column(db.Integer, nullable=False)
+    time_in_minutes = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.String, nullable=False)
+    communion = db.Column(db.Boolean, nullable=False)
+    num_of_people = db.Column(db.Integer, nullable=False)
+    comments = db.Column(db.String, unique=True, nullable=False)
 
 
-class Admin(db.Model):
-    """used for admin access to view and query all the data in the database
-    id,email,password"""
-
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password = db.Column(db.String, unique=True, nullable=False)
-
-
-user = User()
-log = Log()
-admin = Admin()
+user = User(id=None, email=None, password=None)
+log = Log(
+    id=None,
+    record_title=None,
+    last_name=None,
+    first_name=None,
+    start_time=None,
+    end_time=None,
+    time_in_minutes=None,
+    type=None,
+    communion=None,
+    num_of_people=None,
+    comments=None,
+)
 with app.app_context():
     db.create_all()
     db.session.add(user)
     db.session.add(log)
-    db.session.add(admin)
     db.session.commit()
 
 
