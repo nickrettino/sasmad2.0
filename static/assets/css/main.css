@@ -215,7 +215,6 @@ body {
   -webkit-justify-content: center;
   -ms-justify-content: center;
   justify-content: center;
-  /* background-color: rgb(45, 136, 61); */
   background-image: url(/static/assets/images/bg01.jpg);
   padding: 6em 4em 4em 4em;
 }
