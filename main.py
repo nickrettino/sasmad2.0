@@ -5,9 +5,14 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def login():
+def sign_up():
     """login page"""
     return render_template("index.html")
+
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
 
 
 @app.route("/input")
