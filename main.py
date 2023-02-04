@@ -1,3 +1,4 @@
+"""server side script"""
 from flask import Flask, render_template
 
 app = Flask(__name__)
@@ -5,6 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def login():
+    """login page"""
     return render_template("index.html")
 
 
