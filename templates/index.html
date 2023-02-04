@@ -22,10 +22,11 @@
 	</header>
 
 	<!-- Signup Form -->
-	<form id="signup-form" method="post" action="{{ url_for('sign_up') }}">
-		<input type="email" name="email" id="email" placeholder="Email Address" />
-		<input type="password" name="password" id="password" placeholder="Password" />
-		<input type="submit" value="Sign Up" />
+	<form id="signup-form" method="POST" action="{{ url_for('sign_up') }}">
+		{{form.csrf_token}}
+		{{form.email(placeholder="Email Address")}}
+		{{form.password(placeholder="Password")}}
+		{{form.submit(value="Sign Up")}}
 	</form>
 	<!-- Footer -->
 	<footer id="footer">

@@ -1,13 +1,29 @@
 """server side script"""
+import os
+
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_wtf import FlaskForm
+from wtforms import PasswordField, StringField, SubmitField
+from wtforms.validators import DataRequired, Email, Length
 
+SECRET_KEY = os.urandom(32)
 db = SQLAlchemy()
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sasmad.db"
-
+app.config["SECRET_KEY"] = SECRET_KEY
 db.init_app(app)
+
+
+class LoginForm(FlaskForm):
+    """class for the login form"""
+
+    email = StringField(label="Email", validators=[Email()])
+    password = PasswordField(
+        label="Password", validators=[Length(max=14), DataRequired()]
+    )
+    submit = SubmitField(label="Log In")
 
 
 class User(db.Model):
@@ -21,7 +37,8 @@ class User(db.Model):
 
 class Log(db.Model):
     """model for all logs being handled by the database
-    id, record_title, last_name, first_name, start_time, end_time, time in minutes, type, communion, num_of_people, comments
+    id, record_title, last_name, first_name, start_time, end_time, time in minutes,
+    type, communion, num_of_people, comments
     """
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
@@ -63,14 +80,14 @@ class Log(db.Model):
 @app.route("/", methods=["GET"])
 def sign_up():
     """sign up page for first time users"""
-
-    if request.method == "GET":
+    form = LoginForm(request.form)
+    if request.method == "POST" and form:
         email = request.signup_form["email"]
         password = request.signup_form["password"]
         new_user = User(email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
-    return render_template("index.html")
+    return render_template("index.html", form=form)
 
 
 @app.route("/login")
