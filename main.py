@@ -37,25 +37,27 @@ class Log(db.Model):
     comments = db.Column(db.String, unique=True, nullable=False)
 
 
-user = User(id=None, email=None, password=None)
-log = Log(
-    id=None,
-    record_title=None,
-    last_name=None,
-    first_name=None,
-    start_time=None,
-    end_time=None,
-    time_in_minutes=None,
-    type=None,
-    communion=None,
-    num_of_people=None,
-    comments=None,
-)
-with app.app_context():
-    db.create_all()
-    db.session.add(user)
-    db.session.add(log)
-    db.session.commit()
+# ----------------------------- use this to remake the database if you need to ------------------#
+# user = User(id=None, email=None, password=None)
+# log = Log(
+#     id=None,
+#     record_title=None,
+#     last_name=None,
+#     first_name=None,
+#     start_time=None,
+#     end_time=None,
+#     time_in_minutes=None,
+#     type=None,
+#     communion=None,
+#     num_of_people=None,
+#     comments=None,
+# )
+# with app.app_context():
+#     db.create_all()
+#     db.session.add(user)
+#     db.session.add(log)
+#     db.session.commit()
+# ------------------------------------------------------------------------------------------------#
 
 
 @app.route("/", methods=["GET"])
@@ -65,7 +67,9 @@ def sign_up():
     if request.method == "GET":
         email = request.signup_form["email"]
         password = request.signup_form["password"]
-
+        new_user = User(email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
     return render_template("index.html")
 
 
