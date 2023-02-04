@@ -18,11 +18,12 @@
 	<!-- Header -->
 	<header id="header">
 		<h1>Welcome to SASMAD</h1>
-		<p>Welcome back! Please login to continue! if you forgot your password please click <a href="#">Here! </a>.</p>
+		<p>Welcome back! Please login to continue! If you forgot your password please click <a
+				href="{{ url_for('forgot_password') }}">Here! </a>.</p>
 	</header>
 
 	<!-- Signup Form -->
-	<form id="signup-form" method="post" action="#">
+	<form id="signup-form" method="post" action="{{ url_for(login) }}">
 		<input type="email" name="email" id="email" placeholder="Email Address" />
 		<input type="password" name="password" id="password" placeholder="Password" />
 		<input type="submit" value="Sign Up" />
