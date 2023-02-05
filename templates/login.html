@@ -23,7 +23,7 @@
 	</header>
 
 	<!-- Signup Form -->
-	<form id="signup-form" method="post" action="{{ url_for('login') }}">
+	<form id="signup-form" method="POST" action="{{ url_for('login') }}">
 		{{form.csrf_token}}
 		{{form.email( placeholder="Email Address")}}
 		{{form.password( placeholder="Password")}}

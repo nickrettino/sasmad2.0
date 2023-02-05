@@ -98,15 +98,20 @@ def sign_up():
 def login():
     """login page for returning users"""
     # TODO check form input against database to verify if user has been created before allowing them to proceed to the main page
-    form = LoginForm()
+    form = LoginForm(request.form)
+    # GET LOGIN DATA FROM THE FORM
     if request.method == "POST" and form.validate_on_submit():
         email = request.form["email"]
         password = request.form["password"]
-        verification = db.sessions.execute(
-            db.select(User).filter_by(email=email, password=password)
+        # CREATE QUERY TO SEARCH FOR USERS WITH SAME DETAILS
+        search_for_user_query = db.session.execute(
+            db.select(User).where(User.email == email and User.password == password)
         ).scalars()
-        if verification is not None:
+        # CHECK QUERY RESULTS AGAINST LOGIN FORM DATA
+        if email and password in search_for_user_query:
             return render_template("main_page.html")
+        else:
+            return render_template("login.html", form=form)
 
     return render_template("login.html", form=form)
 
