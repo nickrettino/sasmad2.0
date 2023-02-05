@@ -108,10 +108,18 @@ def login():
             db.select(User).where(User.email == email and User.password == password)
         ).scalars()
         # CHECK QUERY RESULTS AGAINST LOGIN FORM DATA
-        if email and password in search_for_user_query:
-            return render_template("main_page.html")
-        else:
-            return render_template("login.html", form=form)
+        with app.app_context():
+            query_results = [
+                {"email": row.email, "password": row.password}
+                for row in search_for_user_query
+            ]
+            if (
+                query_results[0]["email"] == email
+                and query_results[0]["password"] == password
+            ):
+                return render_template("main_page.html")
+            else:
+                return render_template("login.html", form=form)
 
     return render_template("login.html", form=form)
 
