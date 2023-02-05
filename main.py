@@ -75,7 +75,7 @@ class Log(db.Model):
 # ------------------------------------------------------------------------------------------------#
 
 
-# TODO fix information of form not going into he database
+# TODO make sure the form boolean is_admin is working when people are being added to the database
 @app.route("/", methods=["POST", "GET"])
 def sign_up():
     """sign up page for first time users"""
@@ -83,20 +83,32 @@ def sign_up():
     if request.method == "POST" and form.validate_on_submit():
         email = request.form["email"]
         password = request.form["password"]
+        # ADD INFORMATION TO THE DATABASE
         with app.app_context():
             user = User(email=email, password=password, is_admin=False)
             db.create_all()
             db.session.add(user)
             db.session.commit()
+        # REDIRECT TO THE LOGIN PAGE TO VERIFY BEING ADDED TO THE DATABASE
         return render_template("login.html")
     return render_template("index.html", form=form)
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    """login page for recurring users"""
+    """login page for returning users"""
     # TODO check form input against database to verify if user has been created before allowing them to proceed to the main page
-    return render_template("login.html")
+    form = LoginForm()
+    if request.method == "POST" and form.validate_on_submit():
+        email = request.form["email"]
+        password = request.form["password"]
+        verification = db.sessions.execute(
+            db.select(User).filter_by(email=email, password=password)
+        ).scalars()
+        if verification is not None:
+            return render_template("main_page.html")
+
+    return render_template("login.html", form=form)
 
 
 @app.route("/input")
