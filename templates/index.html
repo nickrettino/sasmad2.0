@@ -22,10 +22,10 @@
 	</header>
 
 	<!-- Signup Form -->
-	<form id="signup-form" method="POST" action="{{ url_for('sign_up') }}">
+	<form id="signup-form" method="POST" action="{{ url_for('sign_up') }}" novalidate>
 		{{form.csrf_token}}
-		{{form.email(placeholder="Email Address")}}
-		{{form.password(placeholder="Password")}}
+		{{form.email( placeholder="Email Address")}}
+		{{form.password( placeholder="Password")}}
 		{{form.submit(value="Sign Up")}}
 	</form>
 	<!-- Footer -->

@@ -19,10 +19,8 @@ db.init_app(app)
 class LoginForm(FlaskForm):
     """class for the login form"""
 
-    email = StringField(label="Email", validators=[Email()])
-    password = PasswordField(
-        label="Password", validators=[Length(max=14), DataRequired()]
-    )
+    email = StringField("email", validators=[Email()])
+    password = PasswordField("password", validators=[Length(max=14), DataRequired()])
     submit = SubmitField(label="Log In")
 
 
@@ -32,7 +30,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, unique=True, nullable=False)
-    is_admin = db.Boolean(db.Boolean)
+    is_admin = db.Column(db.Boolean)
 
 
 class Log(db.Model):
@@ -55,7 +53,7 @@ class Log(db.Model):
 
 
 # ----------------------------- use this to remake the database if you need to ------------------#
-# user = User(id=None, email=None, password=None)
+# user = User(id=None, email=None, password=None, is_admin=None)
 # log = Log(
 #     id=None,
 #     record_title=None,
@@ -77,34 +75,41 @@ class Log(db.Model):
 # ------------------------------------------------------------------------------------------------#
 
 
-@app.route("/", methods=["GET"])
+# TODO fix information of form not going into he database
+@app.route("/", methods=["POST", "GET"])
 def sign_up():
     """sign up page for first time users"""
     form = LoginForm(request.form)
-    if request.method == "POST" and form:
-        email = request.signup_form["email"]
-        password = request.signup_form["password"]
-        new_user = User(email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
+    if request.method == "POST" and form.validate_on_submit():
+        email = request.form["email"]
+        password = request.form["password"]
+        with app.app_context():
+            user = User(email=email, password=password, is_admin=False)
+            db.create_all()
+            db.session.add(user)
+            db.session.commit()
+        return render_template("login.html")
     return render_template("index.html", form=form)
 
 
 @app.route("/login")
 def login():
     """login page for recurring users"""
+    # TODO check form input against database to verify if user has been created before allowing them to proceed to the main page
     return render_template("login.html")
 
 
 @app.route("/input")
 def input_page():
     """page where you can input and login to view data"""
+    # TODO input form with required data from the log class
     return render_template("main_page.html")
 
 
 @app.route("/password_recovery")
 def forgot_password():
     """password recovery page"""
+    # TODO create a function to recover password
     return render_template("password_recovery.html")
 
 
