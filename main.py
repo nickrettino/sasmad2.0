@@ -1,10 +1,19 @@
 """server side script"""
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, redirect, render_template, request, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, SubmitField
+from wtforms import (
+    BooleanField,
+    DateTimeField,
+    IntegerField,
+    PasswordField,
+    SelectField,
+    StringField,
+    SubmitField,
+    TextAreaField,
+)
 from wtforms.validators import DataRequired, Email, Length
 
 SECRET_KEY = os.urandom(32)
@@ -22,6 +31,29 @@ class LoginForm(FlaskForm):
     email = StringField("email", validators=[Email()])
     password = PasswordField("password", validators=[Length(max=14), DataRequired()])
     submit = SubmitField(label="Log In")
+
+
+class LogForm(FlaskForm):
+    """form to input visitation data by user"""
+
+    record_title = StringField("Record Title")
+    last_name = StringField("Last Name")
+    first_name = StringField("First Name")
+    start_time = DateTimeField("Start Time")
+    end_time = DateTimeField("End Time")
+    time_in_minutes = IntegerField("Time In Minutes")
+    type = SelectField(
+        "Type",
+        choices=[
+            "Individual Visit",
+            "Telephone Visit",
+            "Group Visit",
+            "Communion Visit",
+        ],
+    )
+    communion = BooleanField("Communion")
+    num_of_people = IntegerField("Number Of People")
+    comments = TextAreaField("Comments")
 
 
 class User(db.Model):
@@ -109,6 +141,7 @@ def login():
         ).scalars()
         # CHECK QUERY RESULTS AGAINST LOGIN FORM DATA
         with app.app_context():
+            # FORMAT RESULT TYPES AS DICTIONARY
             query_results = [
                 {"email": row.email, "password": row.password}
                 for row in search_for_user_query
@@ -117,18 +150,19 @@ def login():
                 query_results[0]["email"] == email
                 and query_results[0]["password"] == password
             ):
-                return render_template("main_page.html")
+                return redirect(url_for("main_page"))
             else:
                 return render_template("login.html", form=form)
 
     return render_template("login.html", form=form)
 
 
-@app.route("/input")
-def input_page():
+@app.route("/main")
+def main_page():
     """page where you can input and login to view data"""
     # TODO input form with required data from the log class
-    return render_template("main_page.html")
+    form = LogForm()
+    return render_template("main_page.html", form=form)
 
 
 @app.route("/password_recovery")
