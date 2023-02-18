@@ -1386,6 +1386,7 @@ body.is-preload #bg:before {
 	background-image: -webkit-radial-gradient(rgba(0, 0, 0, 0.25) 25%, rgba(0, 0, 0, 0) 55%);
 	background-image: -ms-radial-gradient(rgba(0, 0, 0, 0.25) 25%, rgba(0, 0, 0, 0) 55%);
 	background-image: radial-gradient(rgba(0, 0, 0, 0.25) 25%, rgba(0, 0, 0, 0) 55%);
+	/* background-image: url("static/photos for sasmad/jesus-statue.jpg"); */
 	max-width: 100%;
 	text-align: center;
 }
