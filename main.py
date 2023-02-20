@@ -2,11 +2,13 @@
 import os
 
 from flask import Flask, redirect, render_template, request, url_for
+from flask_sqlalchemy import SQLAlchemy
 
 from forms import LogForm, LoginForm
-from sqlman import Log, User, db
+from sqlman import Log, User
 
 SECRET_KEY = os.urandom(32)
+db = SQLAlchemy()
 app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sasmad.db"
