@@ -13,6 +13,7 @@ app = Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sasmad.db"
 app.config["SECRET_KEY"] = SECRET_KEY
+app.config
 db.init_app(app)
 
 
