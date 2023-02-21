@@ -18,16 +18,10 @@
 	<!-- Header -->
 	<header id="header">
 		<h1>Welcome to SASMAD</h1>
-		<p>Sign up! or if you already have an account login <a href="{{ url_for('login') }}">Here </a>.</p>
+		<p>Sign up! or login <a href="{{ url_for('login') }}">Here! </a>.</p>
 	</header>
 
-	<!-- Signup Form -->
-	<form id="signup-form" method="POST" action="{{ url_for('sign_up') }}" novalidate>
-		{{form.csrf_token}}
-		{{form.email( placeholder="Email Address")}}
-		{{form.password( placeholder="Password")}}
-		{{form.submit(value="Sign Up")}}
-	</form>
+
 	<!-- Footer -->
 	<footer id="footer">
 		<ul class="icons">
